@@ -95,6 +95,7 @@ def get_rides(clubId=None, athleteId=None, athleteName=None,
     :param endDate: Day on which to end search for Rides.
     :param startId: Return Rides with an Id greater than or equal to the startId
     :param offset: Return Rides at offset
+    :returns: A list of dicts that represent individual rides
     """
 
     params = locals()
