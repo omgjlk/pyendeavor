@@ -105,3 +105,14 @@ def get_rides(clubId=None, athleteId=None, athleteName=None,
     url = RIDES + '?' + data
     rides = get(url)['rides']
     return rides
+
+def get_ride_data(rideId):
+    """Get data about a specific ride
+
+    :param id: ID (string) of the ride to fetch data from
+    :returns: json data about the ride
+    """
+
+    url = RIDES + '/' + int(rideId)
+    resp = get(url)
+    return resp['ride']
