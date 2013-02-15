@@ -113,6 +113,6 @@ def get_ride_data(rideId):
     :returns: json data about the ride
     """
 
-    url = RIDES + '/' + int(rideId)
+    url = RIDES + '/' + str(rideId)
     resp = get(url)
     return resp['ride']
