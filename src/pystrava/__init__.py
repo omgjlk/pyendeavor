@@ -23,3 +23,6 @@
 """
 pystrava module init code
 """
+
+import api
+import athlete
