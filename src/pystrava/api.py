@@ -41,7 +41,7 @@ log.addHandler(h)
 # Use the v1 API for now, it has more capability
 APIURL = 'http://www.strava.com/api/v1'
 LOGIN = '%s/authentication/login' % APIURL
-RIDES = '%s/rides?' % APIURL
+RIDES = '%s/rides' % APIURL
 
 def login(usermail, password):
     """Login to Strava to obtain a token and ID
@@ -102,6 +102,6 @@ def get_rides(clubId=None, athleteId=None, athleteName=None,
     # Build up a url chunk based on the parameters we got.
     data = '&'.join(['%s=%s' % (p, params[p]) for p in params
                      if params[p]])
-    url = RIDES + data
+    url = RIDES + '?' + data
     rides = get(url)['rides']
     return rides
