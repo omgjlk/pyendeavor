@@ -65,7 +65,7 @@ class StravaAthlete(object):
         rides = []
         while True:
             log.debug('Getting a batch of new rides in get_all_rides')
-            nrides = self.get_rides(offset=offset)
+            nrides = self.get_rides(offset=offset, **args)
             if nrides:
                 rides.extend(nrides)
                 offset += 50
