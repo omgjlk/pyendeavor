@@ -21,19 +21,7 @@
 # pystrava.athlete -- a python library for interfacing with Strava Athletes
 
 import api
-import logging
-
-# Create a logging facility
-class NullHandler(logging.Handler):
-    """Class to do nothing with logging output"""
-    def emit(self, record):
-        pass
-
-# This logging setup will allow clients of pystrava to handle log
-# output however they want, with a default of nothing.
-h = NullHandler()
-log = logging.getLogger('pystrava')
-log.addHandler(h)
+from log import log
 
 class StravaAthlete(object):
     """A class for working with Strava Athletes"""

@@ -18,12 +18,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# pystrava -- a python library for interfacing with Strava
+# log -- Logging data goes in here to be used throughout the module and callers
 
-"""
-pystrava module init code
-"""
+import logging
 
-import api
-import athlete
-import log
+# Create a logging facility
+class NullHandler(logging.Handler):
+    """Class to do nothing with logging output"""
+    def emit(self, record):
+        pass
+
+# This logging setup will allow clients of pystrava to handle log
+# output however they want, with a default of nothing.
+h = NullHandler()
+log = logging.getLogger('pystrava')
+log.addHandler(h)

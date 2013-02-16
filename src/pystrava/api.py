@@ -21,20 +21,10 @@
 # pystrava.api -- API functions
 
 
-import logging
 import requests
 
 # Create a logging facility
-class NullHandler(logging.Handler):
-    """Class to do nothing with logging output"""
-    def emit(self, record):
-        pass
-
-# This logging setup will allow clients of pystrava to handle log
-# output however they want, with a default of nothing.
-h = NullHandler()
-log = logging.getLogger('pystrava')
-log.addHandler(h)
+from log import log
 
 
 # Set the URL -- class attribute, does not change per-instance
