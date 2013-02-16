@@ -30,6 +30,7 @@ from log import log
 # Set the URL -- class attribute, does not change per-instance
 # Use the v1 API for now, it has more capability
 APIURL = 'http://www.strava.com/api/v1'
+STREAMS = '%s/streams/' % APIURL
 LOGIN = '%s/authentication/login' % APIURL
 RIDES = '%s/rides' % APIURL
 

@@ -44,6 +44,7 @@ class StravaRide(object):
         self._movingTime = None
         self._bike = None
         self._location = None
+        self._stream = None
         return
 
     # Put all the property stubs here.
@@ -95,6 +96,12 @@ class StravaRide(object):
             self._get_ride_details()
         return self._location
 
+    @property
+    def stream(self):
+        if not self._stream:
+            self._get_ride_stream()
+        return self._stream
+
     # This is something of an internal function that just populates data
     def _get_ride_details(self):
         url = api.RIDES + '/' + self.id
@@ -108,3 +115,9 @@ class StravaRide(object):
         self._movingTime = data['movingTime']
         self._bike = data['bike']
         self._location = data['location']
+
+    # Another internal function to populate an attribute
+    def _get_ride_stream(self):
+        url = api.STREAMS + self.id
+        data = api.get(url)
+        self._stream = data
