@@ -50,54 +50,63 @@ class StravaRide(object):
     # Put all the property stubs here.
     @property
     def athlete(self):
+        """A dict representation of the athlete who performed the ride"""
         if not self._athlete:
             self._get_ride_details()
         return self._athlete
 
     @property
     def elapsedTime(self):
+        """Total time in seconds for the ride"""
         if not self._elapsedTime:
             self._get_ride_details()
         return self._elapsedTime
 
     @property
     def startDate(self):
+        """Timestamp in UTC of when the ride started"""
         if not self._startDate:
             self._get_ride_details()
         return self._startDate
 
     @property
     def name(self):
+        """Name of the ride"""
         if not self._name:
             self._get_ride_details()
         return self._name
 
     @property
     def distance(self):
+        """Distance of the ride"""
         if not self._distance:
             self._get_ride_details()
         return self._distance
 
     @property
     def movingTime(self):
+        """Total time in seconds spent moving on the ride"""
         if not self._movingTime:
             self._get_ride_details()
         return self._movingTime
 
     @property
     def bike(self):
+        """A dict representing bike data used for the ride"""
         if not self._bike:
             self._get_ride_details()
         return self._bike
 
     @property
     def location(self):
+        """A string of closest known Location to the ride start"""
         if not self._location:
             self._get_ride_details()
         return self._location
 
     @property
     def stream(self):
+        """A dict collection of data points for the ride"""
         if not self._stream:
             self._get_ride_stream()
         return self._stream
