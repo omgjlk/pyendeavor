@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# pystrava.tcx -- code to work with TCX formats
+# pyendeavor.tcx -- code to work with TCX formats
 
 import xml.etree.ElementTree as ET
 import os

@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# pystrava.ride -- code to work with Strava Rides
+# pyendeavor.ride -- code to work with Strava Rides
 
 import api
 import athlete

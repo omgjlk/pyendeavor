@@ -18,10 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# pystrava -- a python library for interfacing with Strava
+# pyendeavor -- a python library for interfacing with Strava
 
 """
-pystrava module init code
+pyendeavor module init code
 """
 
 import log

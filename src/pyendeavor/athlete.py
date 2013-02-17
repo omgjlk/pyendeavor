@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# pystrava.athlete -- a python library for interfacing with Strava Athletes
+# pyendeavor.athlete -- a python library for interfacing with Strava Athletes
 
 import api
 from log import log

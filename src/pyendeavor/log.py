@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# log -- Logging data goes in here to be used throughout the module and callers
+# pyendeavor.log -- Logging data goes in here to be used throughout the module and callers
 
 import logging
 
@@ -28,8 +28,8 @@ class NullHandler(logging.Handler):
     def emit(self, record):
         pass
 
-# This logging setup will allow clients of pystrava to handle log
+# This logging setup will allow clients of pyendeavor to handle log
 # output however they want, with a default of nothing.
 h = NullHandler()
-log = logging.getLogger('pystrava')
+log = logging.getLogger('pyendeavor')
 log.addHandler(h)
