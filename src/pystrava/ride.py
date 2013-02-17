@@ -22,10 +22,15 @@
 
 import api
 import athlete
+import tcx
 from log import log
+import datetime
 
 class StravaRide(object):
     """A class for working with Strava Rides"""
+
+    # We use this to convert from strava's time stamp to a datetime object
+    _tstampformat = '%Y-%m-%dT%H:%M:%SZ'
 
     def __init__(self, id):
         """Create a StravaAPI instance
@@ -45,7 +50,7 @@ class StravaRide(object):
         self._bike = None
         self._location = None
         self._stream = None
-        return
+        self._tcx = None
 
     # Put all the property stubs here.
     @property
@@ -111,6 +116,13 @@ class StravaRide(object):
             self._get_ride_stream()
         return self._stream
 
+    @property
+    def tcx(self):
+        """A tcx representation of the ride data points"""
+        if not self._tcx:
+            self._stream_to_tcx()
+        return self._tcx
+
     # This is something of an internal function that just populates data
     def _get_ride_details(self):
         url = api.RIDES + '/' + self.id
@@ -130,3 +142,47 @@ class StravaRide(object):
         url = api.STREAMS + self.id
         data = api.get(url)
         self._stream = data
+
+    # This is a really expensive call, so much meat and awesomeness
+    def _stream_to_tcx(self):
+        # Get a useful time object of our start time
+        starttime = datetime.datetime.strptime(self.startDate,
+                                               self._tstampformat)
+        # Create a new blank tcx object
+        _tcx = tcx.TCX(self.startDate)
+        # Set various attributes
+        _tcx.distance = self.distance
+        _tcx.duration = self.elapsedTime
+        try:
+            _tcx.maxhr = max(self.stream['heartrate'])
+        except KeyError:
+            # We might not have heartrate data in the stream
+            pass
+        # Figure out how long our stream is
+        pointcount = len(self.stream['latlng'])
+        # Loop through the data in our stream and create gpx points
+        for snapshot in range(pointcount):
+            # Save some typing by referencing bits of data by name
+            args = {}
+            # Convert the time which is seconds from start to a timestamp
+            secs = self.stream['time'][snapshot]
+            tstamp = starttime + datetime.timedelta(seconds=float(secs))
+            args['time'] = tstamp
+            args['latitude'] = self.stream['latlng'][snapshot][0]
+            args['longitude'] = self.stream['latlng'][snapshot][1]
+            args['altitude'] = self.stream['altitude'][snapshot]
+            args['distance'] = self.stream['distance'][snapshot]
+            args['speed'] = self.stream['velocity_smooth'][snapshot]
+            # Try to get a couple optional extension data points
+            try:
+                args['heartrate'] = self.stream['heartrate'][snapshot]
+            except KeyError:
+                pass
+            try:
+                args['cadence'] = self.stream['cadence'][snapshot]
+            except KeyError:
+                pass
+            # Create the point with the above gathered data
+            _tcx.add_point(**args)
+        self._tcx = _tcx
+

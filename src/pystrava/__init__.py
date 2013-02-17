@@ -24,7 +24,8 @@
 pystrava module init code
 """
 
+import log
 import api
 import athlete
 import ride
-import log
+import tcx
