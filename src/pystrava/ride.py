@@ -32,19 +32,20 @@ class StravaRide(object):
     # We use this to convert from strava's time stamp to a datetime object
     _tstampformat = '%Y-%m-%dT%H:%M:%SZ'
 
-    def __init__(self, id):
+    def __init__(self, id, name=None):
         """Create a StravaAPI instance
 
         :param id: Ride ID to use
+        :param name: Ride name to use (optional)
         :returns: Nothing
         """
 
-        self.id = id
+        self.id = str(id)
         # Define some placeholders for ride properties
         self._athlete = None
         self._elapsedTime = None
         self._startDate = None
-        self._name = None
+        self._name = name
         self._distance = None
         self._movingTime = None
         self._bike = None

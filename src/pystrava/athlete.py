@@ -22,6 +22,7 @@
 
 import api
 from log import log
+import ride
 
 class StravaAthlete(object):
     """A class for working with Strava Athletes"""
@@ -49,7 +50,11 @@ class StravaAthlete(object):
         """
 
         log.debug('Calling api.get_rides with extra args: %s' % args)
-        return api.get_rides(athleteId=self.athlete_id, **args)
+        ridelist = []
+        for ridedict in api.get_rides(athleteId=self.athlete_id, **args):
+            ridelist.append(ride.StravaRide(ridedict['id'],
+                                            name=ridedict['name']))
+        return ridelist
 
     def get_all_rides(self, **args):
         """Get a listing of ALL the rides based on provided criteria.
