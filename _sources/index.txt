@@ -5,6 +5,7 @@
 
 Welcome to pyendeavor's documentation!
 ======================================
+.. include:: ../README.rst
 
 Contents:
 
