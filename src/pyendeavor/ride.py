@@ -27,19 +27,16 @@ from log import log
 import datetime
 
 class StravaRide(object):
-    """A class for working with Strava Rides"""
+    """A class for working with Strava Rides
+
+    :param id: Ride ID to use
+    :param name: Ride name to use (optional)
+    """
 
     # We use this to convert from strava's time stamp to a datetime object
     _tstampformat = '%Y-%m-%dT%H:%M:%SZ'
 
     def __init__(self, id, name=None):
-        """Create a StravaAPI instance
-
-        :param id: Ride ID to use
-        :param name: Ride name to use (optional)
-        :returns: Nothing
-        """
-
         self.id = str(id)
         # Define some placeholders for ride properties
         self._athlete = None
@@ -56,7 +53,8 @@ class StravaRide(object):
     # Put all the property stubs here.
     @property
     def athlete(self):
-        """A dict representation of the athlete who performed the ride"""
+        """A StravaAthlete object representation of the athlete who performed
+        the ride"""
         if not self._athlete:
             self._get_ride_details()
         return self._athlete
@@ -119,7 +117,7 @@ class StravaRide(object):
 
     @property
     def tcx(self):
-        """A tcx representation of the ride data points"""
+        """A TCX object representation of the ride data points"""
         if not self._tcx:
             self._stream_to_tcx()
         return self._tcx

@@ -47,6 +47,7 @@ class StravaAthlete(object):
         :param endDate: Day on which to end search for Rides.
         :param startId: Return Rides with an Id greater than or equal to the startId
         :param offset: Return Rides at offset
+        :returns: A list of StravaRide objects
         """
 
         log.debug('Calling api.get_rides with extra args: %s' % args)
@@ -63,6 +64,7 @@ class StravaAthlete(object):
         :param startDate: Day on which to start search for Rides. YYYY-MM-DD
         :param endDate: Day on which to end search for Rides.
         :param startId: Return Rides with an Id greater than or equal to the startId
+        :returns: A list of StravaRide objects
         """
 
         # start with an offset of 0, then crank it up by 50 each time we loop
