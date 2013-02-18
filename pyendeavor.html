@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyendeavor Package &mdash; pyendeavor  documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyendeavor  documentation" href="index.html" />
+    <link rel="prev" title="Welcome to pyendeavor’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyendeavor’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pyendeavor  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyendeavor-package">
+<h1>pyendeavor Package<a class="headerlink" href="#pyendeavor-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">pyendeavor</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-pyendeavor.__init__"></span><p>pyendeavor module init code</p>
+</div>
+<div class="section" id="module-pyendeavor.api">
+<span id="api-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">api</span></tt> Module<a class="headerlink" href="#module-pyendeavor.api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyendeavor.api.get">
+<tt class="descclassname">pyendeavor.api.</tt><tt class="descname">get</tt><big>(</big><em>url</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/api.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.api.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Issue a http get request to the provided url</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>url</strong> &#8211; Constructed URL to GET against</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyendeavor.api.get_ride_data">
+<tt class="descclassname">pyendeavor.api.</tt><tt class="descname">get_ride_data</tt><big>(</big><em>rideId</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/api.html#get_ride_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.api.get_ride_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data about a specific ride</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> &#8211; ID (string) of the ride to fetch data from</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json data about the ride</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyendeavor.api.get_rides">
+<tt class="descclassname">pyendeavor.api.</tt><tt class="descname">get_rides</tt><big>(</big><em>clubId=None</em>, <em>athleteId=None</em>, <em>athleteName=None</em>, <em>startDate=None</em>, <em>endDate=None</em>, <em>startId=None</em>, <em>offset=None</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/api.html#get_rides"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.api.get_rides" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a listing of the rides based on provided criteria.  Rides
+returned will be limited to 50.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>clubId</strong> &#8211; Id of the Club for which to search for member&#8217;s Rides.</li>
+<li><strong>athleteId</strong> &#8211; Id of the Athlete for which to search for Rides.</li>
+<li><strong>athleteName</strong> &#8211; Username of the Athlete for which to search for Rides.</li>
+<li><strong>startDate</strong> &#8211; Day on which to start search for Rides. YYYY-MM-DD</li>
+<li><strong>endDate</strong> &#8211; Day on which to end search for Rides.</li>
+<li><strong>startId</strong> &#8211; Return Rides with an Id greater than or equal to the startId</li>
+<li><strong>offset</strong> &#8211; Return Rides at offset</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of dicts that represent individual rides</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyendeavor.api.login">
+<tt class="descclassname">pyendeavor.api.</tt><tt class="descname">login</tt><big>(</big><em>usermail</em>, <em>password</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/api.html#login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.api.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Login to Strava to obtain a token and ID</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>usermail</strong> &#8211; Strava user email</li>
+<li><strong>password</strong> &#8211; Strava user password</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Auth Token string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyendeavor.api.post">
+<tt class="descclassname">pyendeavor.api.</tt><tt class="descname">post</tt><big>(</big><em>url</em>, <em>data=None</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/api.html#post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.api.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Issue an http post request to the provided url</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> &#8211; Constructed URL to POST against</li>
+<li><strong>data</strong> &#8211; Optional dict to pass in the POST</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyendeavor.athlete">
+<span id="athlete-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">athlete</span></tt> Module<a class="headerlink" href="#module-pyendeavor.athlete" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyendeavor.athlete.StravaAthlete">
+<em class="property">class </em><tt class="descclassname">pyendeavor.athlete.</tt><tt class="descname">StravaAthlete</tt><big>(</big><em>athlete_id</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/athlete.html#StravaAthlete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.athlete.StravaAthlete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A class for working with Strava Athletes</p>
+<dl class="method">
+<dt id="pyendeavor.athlete.StravaAthlete.get_all_rides">
+<tt class="descname">get_all_rides</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/athlete.html#StravaAthlete.get_all_rides"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.athlete.StravaAthlete.get_all_rides" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a listing of ALL the rides based on provided criteria.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>clubId</strong> &#8211; Id of the Club for which to search for member&#8217;s Rides.</li>
+<li><strong>startDate</strong> &#8211; Day on which to start search for Rides. YYYY-MM-DD</li>
+<li><strong>endDate</strong> &#8211; Day on which to end search for Rides.</li>
+<li><strong>startId</strong> &#8211; Return Rides with an Id greater than or equal to the startId</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of StravaRide objects</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyendeavor.athlete.StravaAthlete.get_rides">
+<tt class="descname">get_rides</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/athlete.html#StravaAthlete.get_rides"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.athlete.StravaAthlete.get_rides" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a listing of the rides based on provided criteria.  Rides
+returned will be limited to 50.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>clubId</strong> &#8211; Id of the Club for which to search for member&#8217;s Rides.</li>
+<li><strong>startDate</strong> &#8211; Day on which to start search for Rides. YYYY-MM-DD</li>
+<li><strong>endDate</strong> &#8211; Day on which to end search for Rides.</li>
+<li><strong>startId</strong> &#8211; Return Rides with an Id greater than or equal to the startId</li>
+<li><strong>offset</strong> &#8211; Return Rides at offset</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of StravaRide objects</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyendeavor.log">
+<span id="log-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">log</span></tt> Module<a class="headerlink" href="#module-pyendeavor.log" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyendeavor.log.NullHandler">
+<em class="property">class </em><tt class="descclassname">pyendeavor.log.</tt><tt class="descname">NullHandler</tt><big>(</big><em>level=0</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/log.html#NullHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.log.NullHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></tt></p>
+<p>Class to do nothing with logging output</p>
+<dl class="method">
+<dt id="pyendeavor.log.NullHandler.emit">
+<tt class="descname">emit</tt><big>(</big><em>record</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/log.html#NullHandler.emit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.log.NullHandler.emit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyendeavor.ride">
+<span id="ride-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">ride</span></tt> Module<a class="headerlink" href="#module-pyendeavor.ride" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyendeavor.ride.StravaRide">
+<em class="property">class </em><tt class="descclassname">pyendeavor.ride.</tt><tt class="descname">StravaRide</tt><big>(</big><em>id</em>, <em>name=None</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A class for working with Strava Rides</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; Ride ID to use</li>
+<li><strong>name</strong> &#8211; Ride name to use (optional)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.athlete">
+<tt class="descname">athlete</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.athlete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.athlete" title="Permalink to this definition">¶</a></dt>
+<dd><p>A StravaAthlete object representation of the athlete who performed
+the ride</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.bike">
+<tt class="descname">bike</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.bike"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.bike" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict representing bike data used for the ride</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.distance">
+<tt class="descname">distance</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distance of the ride</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.elapsedTime">
+<tt class="descname">elapsedTime</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.elapsedTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.elapsedTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total time in seconds for the ride</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.location">
+<tt class="descname">location</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.location" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string of closest known Location to the ride start</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.movingTime">
+<tt class="descname">movingTime</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.movingTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.movingTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total time in seconds spent moving on the ride</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.name">
+<tt class="descname">name</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the ride</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.startDate">
+<tt class="descname">startDate</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.startDate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.startDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timestamp in UTC of when the ride started</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.stream">
+<tt class="descname">stream</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.stream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict collection of data points for the ride</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.ride.StravaRide.tcx">
+<tt class="descname">tcx</tt><a class="reference internal" href="_modules/pyendeavor/ride.html#StravaRide.tcx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.ride.StravaRide.tcx" title="Permalink to this definition">¶</a></dt>
+<dd><p>A TCX object representation of the ride data points</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyendeavor.tcx">
+<span id="tcx-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">tcx</span></tt> Module<a class="headerlink" href="#module-pyendeavor.tcx" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyendeavor.tcx.TCX">
+<em class="property">class </em><tt class="descclassname">pyendeavor.tcx.</tt><tt class="descname">TCX</tt><big>(</big><em>starttime</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/tcx.html#TCX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.tcx.TCX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A class to create TCX objects and manipulate them</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>starttime</strong> &#8211; Timestamp in Garmin format for the start of the ride</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyendeavor.tcx.TCX.add_point">
+<tt class="descname">add_point</tt><big>(</big><em>time=0</em>, <em>latitude=0</em>, <em>longitude=0</em>, <em>altitude=0</em>, <em>distance=0</em>, <em>speed=0</em>, <em>heartrate=0</em>, <em>cadence=0</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/tcx.html#TCX.add_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.tcx.TCX.add_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a trackpoint to the ride</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>time</strong> &#8211; GPS timestamp</li>
+<li><strong>latitude</strong> &#8211; latitude degrees</li>
+<li><strong>longitude</strong> &#8211; longitude degrees</li>
+<li><strong>altitude</strong> &#8211; altitude meters</li>
+<li><strong>distance</strong> &#8211; distance meters</li>
+<li><strong>speed</strong> &#8211; speed</li>
+<li><strong>heartrate</strong> &#8211; heartrate bpm (optional)</li>
+<li><strong>cadence</strong> &#8211; cadence rpm (optional)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Nothing</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.tcx.TCX.distance">
+<tt class="descname">distance</tt><a class="reference internal" href="_modules/pyendeavor/tcx.html#TCX.distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.tcx.TCX.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ride distance in meters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyendeavor.tcx.TCX.dump">
+<tt class="descname">dump</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/tcx.html#TCX.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.tcx.TCX.dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyendeavor.tcx.TCX.duration">
+<tt class="descname">duration</tt><a class="reference internal" href="_modules/pyendeavor/tcx.html#TCX.duration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.tcx.TCX.duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ride duration in seconds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyendeavor.tcx.TCX.write">
+<tt class="descname">write</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/pyendeavor/tcx.html#TCX.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyendeavor.tcx.TCX.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyendeavor Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">pyendeavor</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-pyendeavor.api"><tt class="docutils literal"><span class="pre">api</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-pyendeavor.athlete"><tt class="docutils literal"><span class="pre">athlete</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-pyendeavor.log"><tt class="docutils literal"><span class="pre">log</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-pyendeavor.ride"><tt class="docutils literal"><span class="pre">ride</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-pyendeavor.tcx"><tt class="docutils literal"><span class="pre">tcx</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to pyendeavor&#8217;s documentation!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/pyendeavor.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyendeavor’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">pyendeavor  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Jesse Keating.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

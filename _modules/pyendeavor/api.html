@@ -1,0 +1,204 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyendeavor.api &mdash; pyendeavor  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyendeavor  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">pyendeavor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pyendeavor.api</h1><div class="highlight"><pre>
+<span class="c"># Copyright (c) 2013 Jesse Keating &lt;jkeating@j2solutions.net&gt;</span>
+<span class="c">#</span>
+<span class="c"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c"># in the Software without restriction, including without limitation the rights</span>
+<span class="c"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c"># copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c"># furnished to do so, subject to the following conditions:</span>
+<span class="c">#</span>
+<span class="c"># The above copyright notice and this permission notice shall be included in</span>
+<span class="c"># all copies or substantial portions of the Software.</span>
+<span class="c">#</span>
+<span class="c"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c"># LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="c"># SOFTWARE.</span>
+<span class="c">#</span>
+<span class="c"># pyendeavor.api -- API functions</span>
+
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c"># Create a logging facility</span>
+<span class="kn">from</span> <span class="nn">log</span> <span class="kn">import</span> <span class="n">log</span>
+
+
+<span class="c"># Set the URL -- class attribute, does not change per-instance</span>
+<span class="c"># Use the v1 API for now, it has more capability</span>
+<span class="n">APIURL</span> <span class="o">=</span> <span class="s">&#39;http://www.strava.com/api/v1&#39;</span>
+<span class="n">STREAMS</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/streams/&#39;</span> <span class="o">%</span> <span class="n">APIURL</span>
+<span class="n">LOGIN</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/authentication/login&#39;</span> <span class="o">%</span> <span class="n">APIURL</span>
+<span class="n">RIDES</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/rides&#39;</span> <span class="o">%</span> <span class="n">APIURL</span>
+
+<div class="viewcode-block" id="login"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.api.login">[docs]</a><span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="n">usermail</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Login to Strava to obtain a token and ID</span>
+
+<span class="sd">    :param usermail: Strava user email</span>
+<span class="sd">    :param password: Strava user password</span>
+<span class="sd">    :returns: Auth Token string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">LOGIN</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;email&#39;</span><span class="p">:</span> <span class="n">usermail</span><span class="p">,</span>
+                                           <span class="s">&#39;password&#39;</span><span class="p">:</span> <span class="n">password</span><span class="p">})</span>
+    <span class="c"># Catch this on our own someday</span>
+    <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;token&#39;</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.api.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Issue a http get request to the provided url</span>
+
+<span class="sd">    :param url: Constructed URL to GET against</span>
+<span class="sd">    :returns: json data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Sending GET for </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">url</span><span class="p">)</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="post"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.api.post">[docs]</a><span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Issue an http post request to the provided url</span>
+
+<span class="sd">    :param url: Constructed URL to POST against</span>
+<span class="sd">    :param data: Optional dict to pass in the POST</span>
+<span class="sd">    :returns: json data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Sending POST for </span><span class="si">%s</span><span class="s"> with data </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="get_rides"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.api.get_rides">[docs]</a><span class="k">def</span> <span class="nf">get_rides</span><span class="p">(</span><span class="n">clubId</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">athleteId</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">athleteName</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+              <span class="n">startDate</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">endDate</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">startId</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a listing of the rides based on provided criteria.  Rides</span>
+<span class="sd">    returned will be limited to 50.</span>
+
+<span class="sd">    :param clubId: Id of the Club for which to search for member&#39;s Rides.</span>
+<span class="sd">    :param athleteId: Id of the Athlete for which to search for Rides.</span>
+<span class="sd">    :param athleteName: Username of the Athlete for which to search for Rides.</span>
+<span class="sd">    :param startDate: Day on which to start search for Rides. YYYY-MM-DD</span>
+<span class="sd">    :param endDate: Day on which to end search for Rides.</span>
+<span class="sd">    :param startId: Return Rides with an Id greater than or equal to the startId</span>
+<span class="sd">    :param offset: Return Rides at offset</span>
+<span class="sd">    :returns: A list of dicts that represent individual rides</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">()</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Getting rides with params: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">params</span><span class="p">)</span>
+    <span class="c"># Build up a url chunk based on the parameters we got.</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="s">&#39;&amp;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span>
+                     <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]])</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">RIDES</span> <span class="o">+</span> <span class="s">&#39;?&#39;</span> <span class="o">+</span> <span class="n">data</span>
+    <span class="n">rides</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)[</span><span class="s">&#39;rides&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">rides</span>
+</div>
+<div class="viewcode-block" id="get_ride_data"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.api.get_ride_data">[docs]</a><span class="k">def</span> <span class="nf">get_ride_data</span><span class="p">(</span><span class="n">rideId</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get data about a specific ride</span>
+
+<span class="sd">    :param id: ID (string) of the ride to fetch data from</span>
+<span class="sd">    :returns: json data about the ride</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="n">RIDES</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rideId</span><span class="p">)</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resp</span><span class="p">[</span><span class="s">&#39;ride&#39;</span><span class="p">]</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">pyendeavor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Jesse Keating.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

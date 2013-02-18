@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyendeavor.ride &mdash; pyendeavor  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyendeavor  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">pyendeavor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pyendeavor.ride</h1><div class="highlight"><pre>
+<span class="c"># Copyright (c) 2013 Jesse Keating &lt;jkeating@j2solutions.net&gt;</span>
+<span class="c">#</span>
+<span class="c"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c"># in the Software without restriction, including without limitation the rights</span>
+<span class="c"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c"># copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c"># furnished to do so, subject to the following conditions:</span>
+<span class="c">#</span>
+<span class="c"># The above copyright notice and this permission notice shall be included in</span>
+<span class="c"># all copies or substantial portions of the Software.</span>
+<span class="c">#</span>
+<span class="c"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c"># LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="c"># SOFTWARE.</span>
+<span class="c">#</span>
+<span class="c"># pyendeavor.ride -- code to work with Strava Rides</span>
+
+<span class="kn">import</span> <span class="nn">api</span>
+<span class="kn">import</span> <span class="nn">athlete</span>
+<span class="kn">import</span> <span class="nn">tcx</span>
+<span class="kn">from</span> <span class="nn">log</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<div class="viewcode-block" id="StravaRide"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide">[docs]</a><span class="k">class</span> <span class="nc">StravaRide</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A class for working with Strava Rides</span>
+
+<span class="sd">    :param id: Ride ID to use</span>
+<span class="sd">    :param name: Ride name to use (optional)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># We use this to convert from strava&#39;s time stamp to a datetime object</span>
+    <span class="n">_tstampformat</span> <span class="o">=</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">T%H:%M:%SZ&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="c"># Define some placeholders for ride properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_athlete</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elapsedTime</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_startDate</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_movingTime</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bike</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tcx</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="c"># Put all the property stubs here.</span>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.athlete"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.athlete">[docs]</a>    <span class="k">def</span> <span class="nf">athlete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A StravaAthlete object representation of the athlete who performed</span>
+<span class="sd">        the ride&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_athlete</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_ride_details</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_athlete</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.elapsedTime"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.elapsedTime">[docs]</a>    <span class="k">def</span> <span class="nf">elapsedTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Total time in seconds for the ride&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsedTime</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_ride_details</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsedTime</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.startDate"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.startDate">[docs]</a>    <span class="k">def</span> <span class="nf">startDate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Timestamp in UTC of when the ride started&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startDate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_ride_details</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startDate</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.name"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.name">[docs]</a>    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Name of the ride&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_ride_details</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.distance"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.distance">[docs]</a>    <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Distance of the ride&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_ride_details</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.movingTime"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.movingTime">[docs]</a>    <span class="k">def</span> <span class="nf">movingTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Total time in seconds spent moving on the ride&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movingTime</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_ride_details</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movingTime</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.bike"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.bike">[docs]</a>    <span class="k">def</span> <span class="nf">bike</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A dict representing bike data used for the ride&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bike</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_ride_details</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bike</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.location"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.location">[docs]</a>    <span class="k">def</span> <span class="nf">location</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A string of closest known Location to the ride start&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_ride_details</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.stream"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.stream">[docs]</a>    <span class="k">def</span> <span class="nf">stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A dict collection of data points for the ride&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_ride_stream</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="StravaRide.tcx"><a class="viewcode-back" href="../../pyendeavor.html#pyendeavor.ride.StravaRide.tcx">[docs]</a>    <span class="k">def</span> <span class="nf">tcx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A TCX object representation of the ride data points&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tcx</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stream_to_tcx</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tcx</span>
+
+    <span class="c"># This is something of an internal function that just populates data</span></div>
+    <span class="k">def</span> <span class="nf">_get_ride_details</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">RIDES</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">resp</span><span class="p">[</span><span class="s">&#39;ride&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_athlete</span> <span class="o">=</span> <span class="n">athlete</span><span class="o">.</span><span class="n">StravaAthlete</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;athlete&#39;</span><span class="p">][</span><span class="s">&#39;id&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elapsedTime</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;elapsedTime&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_startDate</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;startDate&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;distance&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_movingTime</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;movingTime&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bike</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;bike&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;location&#39;</span><span class="p">]</span>
+
+    <span class="c"># Another internal function to populate an attribute</span>
+    <span class="k">def</span> <span class="nf">_get_ride_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">STREAMS</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="c"># This is a really expensive call, so much meat and awesomeness</span>
+    <span class="k">def</span> <span class="nf">_stream_to_tcx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Get a useful time object of our start time</span>
+        <span class="n">starttime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">startDate</span><span class="p">,</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">_tstampformat</span><span class="p">)</span>
+        <span class="c"># Create a new blank tcx object</span>
+        <span class="n">_tcx</span> <span class="o">=</span> <span class="n">tcx</span><span class="o">.</span><span class="n">TCX</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">startDate</span><span class="p">)</span>
+        <span class="c"># Set various attributes</span>
+        <span class="n">_tcx</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance</span>
+        <span class="n">_tcx</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsedTime</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_tcx</span><span class="o">.</span><span class="n">maxhr</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;heartrate&#39;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="c"># We might not have heartrate data in the stream</span>
+            <span class="k">pass</span>
+        <span class="c"># Figure out how long our stream is</span>
+        <span class="n">pointcount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;latlng&#39;</span><span class="p">])</span>
+        <span class="c"># Loop through the data in our stream and create gpx points</span>
+        <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pointcount</span><span class="p">):</span>
+            <span class="c"># Save some typing by referencing bits of data by name</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="c"># Convert the time which is seconds from start to a timestamp</span>
+            <span class="n">secs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;time&#39;</span><span class="p">][</span><span class="n">snapshot</span><span class="p">]</span>
+            <span class="n">tstamp</span> <span class="o">=</span> <span class="n">starttime</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">secs</span><span class="p">))</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tstamp</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;latitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;latlng&#39;</span><span class="p">][</span><span class="n">snapshot</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;longitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;latlng&#39;</span><span class="p">][</span><span class="n">snapshot</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;altitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;altitude&#39;</span><span class="p">][</span><span class="n">snapshot</span><span class="p">]</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;distance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;distance&#39;</span><span class="p">][</span><span class="n">snapshot</span><span class="p">]</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;velocity_smooth&#39;</span><span class="p">][</span><span class="n">snapshot</span><span class="p">]</span>
+            <span class="c"># Try to get a couple optional extension data points</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">args</span><span class="p">[</span><span class="s">&#39;heartrate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;heartrate&#39;</span><span class="p">][</span><span class="n">snapshot</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">args</span><span class="p">[</span><span class="s">&#39;cadence&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">[</span><span class="s">&#39;cadence&#39;</span><span class="p">][</span><span class="n">snapshot</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="c"># Create the point with the above gathered data</span>
+            <span class="n">_tcx</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tcx</span> <span class="o">=</span> <span class="n">_tcx</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">pyendeavor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Jesse Keating.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
