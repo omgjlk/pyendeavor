@@ -13,3 +13,5 @@ Documentation can be found at http://j2sol.github.com/pyendeavor
 Source code can be found at https://github.com/j2sol/pyendeavor
 
 Strava is a trademark of Strava, Inc.
+
+DERP
